@@ -12,7 +12,8 @@
             playPauseContainer: {},
             playBtn: {},
             pauseBtn: {},
-            volumeBtn: {}
+            volumeBtn: {},
+            songSources: []
         }
     };
 
@@ -22,7 +23,8 @@
         playButtonImgSrc: 'images/play.png',
         pauseButtonImgSrc: 'images/pause.png',
         volumeButtonImgSrc: 'images/volume_max.png',
-        noMusicText: 'No Music'
+        noMusicText: 'No Music',
+        songSources: []
     };
 
     // Plugin
@@ -96,6 +98,10 @@
         // Putting on markup
 
         $.html5Audio.element.mainContainer.appendTo($.html5Audio.that);
+
+        // TODO : DELETE THIS CODE
+
+        $.html5Audio.element.audio = $('<audio>').attr({ src: 'musics/01.mp3' }).appendTo($.html5Audio.element.mainContainer).get(0);
     };
 
     $.html5Audio.object.configurator = function () {
@@ -104,6 +110,10 @@
         // Initial State: Paused
 
         $.html5Audio.element.mainContainer.addClass('paused');
+
+        // Setting Song Sources
+
+        $.html5Audio.element.songSources = $.html5Audio.config.songSources;
     };
 
     $.html5Audio.object.behavior = function () {
@@ -113,11 +123,15 @@
         var play = function (e) {
             $.html5Audio.element.mainContainer.removeClass('paused');
             $.html5Audio.element.mainContainer.addClass('playing');
+
+            $.html5Audio.element.audio.play();
         };
 
         var pause = function (e) {
             $.html5Audio.element.mainContainer.removeClass('playing');
             $.html5Audio.element.mainContainer.addClass('paused');
+
+            $.html5Audio.element.audio.pause();
         };
 
         var togglePlayPause = function (e) {
@@ -129,6 +143,16 @@
             else {
                 play();
             }
+        };
+
+        var playSong = function (songUrl) {
+            var mainContainer = $.html5Audio.element.mainContainer;
+            mainContainer.find('audio').remove();
+
+            var audio = $('<audio>').attr({ src: songUrl }).appendTo(mainContainer).get(0);
+
+            audio.load();
+            audio.play();
         };
 
         var mute = function (e) {
@@ -144,6 +168,7 @@
             play: play,
             pause: pause,
             togglePlayPause: togglePlayPause,
+            playSong: playSong,
             mute: mute,
             loadSong: loadSong
         }
@@ -152,7 +177,16 @@
     $.html5Audio.object.binder = function (behavior) {
         //// ** CONSTRUCTOR ** ////
 
+        if ($.html5Audio.element.songSources.length) {
+            $.html5Audio.element.songSources.click(function (e) {
+                e.preventDefault();
+                songUrl = $(e.currentTarget).attr('h5a-song-url');
+            });
+            behavior.playSong(songUrl);
+        }
+
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(e); });
+
     };
 
 })(jQuery);
