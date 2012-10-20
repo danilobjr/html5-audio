@@ -5,8 +5,15 @@
     $.html5Audio = {
         defaultSettings: {},
         config: {},
-        obj: {},
-        fn: {}
+        that: {},
+        object: {},
+        element: {
+            mainContainer: {},
+            playPauseContainer: {},
+            playBtn: {},
+            pauseBtn: {},
+            volumeBtn: {}
+        }
     };
 
     // Default Settings
@@ -14,7 +21,7 @@
     $.html5Audio.defaultSettings = {
         playButtonImgSrc: 'images/play.png',
         pauseButtonImgSrc: 'images/pause.png',
-        muteButtonImgSrc: 'images/volume_high.png',
+        volumeButtonImgSrc: 'images/volume_max.png',
         noMusicText: 'No Music'
     };
 
@@ -22,66 +29,49 @@
 
     $.fn.html5Audio = function (userSettings) {
 
-        // Constructor
+        //// ** CONSTRUCTOR ** ////
 
-        $.html5Audio.obj = $(this);
+        $.html5Audio.that = $(this);
         $.html5Audio.config = $.extend({}, $.html5Audio.defaultSettings, userSettings); ;
 
-        $.html5Audio.fn.run();
-
-        // Methods
-
-        var play = function () {
-            // TODO
-        };
-
-        var pause = function () {
-            // TODO
-        };
-
-        var mute = function () {
-            // TODO
-        };
-
-        var loadSong = function () {
-            // TODO
-        };
+        $.html5Audio.object.constructor();
+        $.html5Audio.object.configurator();
+        var behavior = $.html5Audio.object.behavior();
+        $.html5Audio.object.binder(behavior);
 
 
         return {
-            play: play,
-            pause: pause,
-            mute: mute,
-            loadSong: loadSong
+            play: behavior.play,
+            pause: behavior.pause,
+            mute: behavior.mute,
+            loadSong: behavior.loadSong
         };
     };
 
-    // Functions
+    // Objects
 
-    $.html5Audio.fn.run = function () {
-        $.html5Audio.fn.createElements();
-        $.html5Audio.fn.defineBehavior();
-    };
+    $.html5Audio.object.constructor = function () {
 
-    $.html5Audio.fn.createElements = function () {
+        //// ** CONSTRUCTOR ** ////
+
         // Main Container
 
-        var container = $('<div>').addClass('html5Audio');
+        $.html5Audio.element.mainContainer = $('<div>').addClass('html5Audio');
 
         // Controls Container
 
         var controlsContainer = $('<div>').addClass('h5aControls');
-        controlsContainer.appendTo(container);
+        controlsContainer.appendTo($.html5Audio.element.mainContainer);
 
         // Song Container
 
         var songContainer = $('<div>').addClass('h5aSong');
-        songContainer.appendTo(container);
+        songContainer.appendTo($.html5Audio.element.mainContainer);
 
         // Play / Pause Container
 
-        var playPauseContainer = $('<div>').addClass('h5aPlayPause');
-        playPauseContainer.appendTo(controlsContainer);
+        $.html5Audio.element.playPauseContainer = $('<div>').addClass('h5aPlayPause');
+        $.html5Audio.element.playPauseContainer.appendTo(controlsContainer);
 
         // Volume Container
 
@@ -90,13 +80,13 @@
 
         // Control Buttons
 
-        var playBtn = $('<img>').addClass('h5aPlayBtn').attr('src', $.html5Audio.config.playButtonImgSrc);
-        var pauseBtn = $('<img>').addClass('h5aPauseBtn').attr('src', $.html5Audio.config.pauseButtonImgSrc);
-        var muteBtn = $('<img>').addClass('h5aMuteBtn').attr('src', $.html5Audio.config.muteButtonImgSrc);
+        $.html5Audio.element.playBtn = $('<img>').addClass('h5aPlayBtn').attr('src', $.html5Audio.config.playButtonImgSrc);
+        $.html5Audio.element.pauseBtn = $('<img>').addClass('h5aPauseBtn').attr('src', $.html5Audio.config.pauseButtonImgSrc);
+        $.html5Audio.element.volumeBtn = $('<img>').addClass('h5aMuteBtn').attr('src', $.html5Audio.config.volumeButtonImgSrc);
 
-        playBtn.appendTo(playPauseContainer);
-        pauseBtn.appendTo(playPauseContainer);
-        muteBtn.appendTo(volumeContainer);
+        $.html5Audio.element.playBtn.appendTo($.html5Audio.element.playPauseContainer);
+        $.html5Audio.element.pauseBtn.appendTo($.html5Audio.element.playPauseContainer);
+        $.html5Audio.element.volumeBtn.appendTo(volumeContainer);
 
         // Song Name
 
@@ -105,16 +95,64 @@
 
         // Putting on markup
 
-        container.appendTo($.html5Audio.obj);
+        $.html5Audio.element.mainContainer.appendTo($.html5Audio.that);
     };
 
-    $.html5Audio.fn.defineBehavior = function () {
-        var obj = $.html5Audio.obj;
-        var mainContainer = obj.find('.html5Audio');
+    $.html5Audio.object.configurator = function () {
+        //// ** CONSTRUCTOR ** ////
 
         // Initial State: Paused
 
-        mainContainer.addClass('paused');
+        $.html5Audio.element.mainContainer.addClass('paused');
+    };
+
+    $.html5Audio.object.behavior = function () {
+
+        //// ** METHODS ** ////
+
+        var play = function (e) {
+            $.html5Audio.element.mainContainer.removeClass('paused');
+            $.html5Audio.element.mainContainer.addClass('playing');
+        };
+
+        var pause = function (e) {
+            $.html5Audio.element.mainContainer.removeClass('playing');
+            $.html5Audio.element.mainContainer.addClass('paused');
+        };
+
+        var togglePlayPause = function (e) {
+            var mainContainer = $.html5Audio.element.mainContainer;
+
+            if (mainContainer.hasClass('playing')) {
+                pause();
+            }
+            else {
+                play();
+            }
+        };
+
+        var mute = function (e) {
+            // TODO
+        };
+
+        var loadSong = function (e) {
+            // TODO
+        };
+
+
+        return {
+            play: play,
+            pause: pause,
+            togglePlayPause: togglePlayPause,
+            mute: mute,
+            loadSong: loadSong
+        }
+    };
+
+    $.html5Audio.object.binder = function (behavior) {
+        //// ** CONSTRUCTOR ** ////
+
+        $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(e); });
     };
 
 })(jQuery);
