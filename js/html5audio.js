@@ -23,6 +23,7 @@
         playButtonImgSrc: 'images/play.png',
         pauseButtonImgSrc: 'images/pause.png',
         volumeButtonImgSrc: 'images/volume_max.png',
+        mutedVolumeButtonImgSrc: 'images/volume_muted.png',
         noMusicText: 'No Music',
         songSources: []
     };
@@ -45,8 +46,8 @@
         return {
             play: behavior.play,
             pause: behavior.pause,
-            mute: behavior.mute,
-            loadSong: behavior.loadSong
+            togglePlayPause: behavior.togglePlayPause,
+            toggleMute: behavior.toggleMute
         };
     };
 
@@ -149,18 +150,22 @@
             var mainContainer = $.html5Audio.element.mainContainer;
             mainContainer.find('audio').remove();
 
-            var audio = $('<audio>').attr({ src: songUrl }).appendTo(mainContainer).get(0);
+            $.html5Audio.element.audio = $('<audio>').attr({ src: songUrl }).appendTo(mainContainer).get(0);
 
-            audio.load();
-            audio.play();
+            play();
         };
 
-        var mute = function (e) {
-            // TODO
-        };
+        var toggleMute = function (e) {
+            var isMuted = $.html5Audio.element.audio.muted;
 
-        var loadSong = function (e) {
-            // TODO
+            if (isMuted) {
+                $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.volumeButtonImgSrc);
+            }
+            else {
+                $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.mutedVolumeButtonImgSrc);
+            }
+
+            $.html5Audio.element.audio.muted = !isMuted;
         };
 
 
@@ -169,8 +174,7 @@
             pause: pause,
             togglePlayPause: togglePlayPause,
             playSong: playSong,
-            mute: mute,
-            loadSong: loadSong
+            toggleMute: toggleMute
         }
     };
 
@@ -186,7 +190,7 @@
         }
 
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(e); });
-
+        $.html5Audio.element.volumeBtn.click(function (e) { behavior.toggleMute(e); });
     };
 
 })(jQuery);
