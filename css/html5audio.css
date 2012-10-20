@@ -1,2 +1,47 @@
-body {
+.html5Audio {
+    
+}
+
+.h5aControls {
+    
+}
+
+.h5aSong {
+    
+}
+
+.h5aPlayPause {
+    float: left;
+}
+
+.h5aVolume {
+    
+}
+
+.h5aPlayBtn {
+    position: absolute;
+}
+
+.h5aPauseBtn {
+    
+}
+
+.h5aMuteBtn {
+    
+}
+
+.playing .h5aPauseBtn {
+    opacity: 1;
+}
+
+.playing .h5aPlayBtn {
+    opacity: 0;
+}
+
+.paused .h5aPauseBtn {
+    opacity: 0;
+}
+
+.paused .h5aPlayBtn {
+    opacity: 1;
 }

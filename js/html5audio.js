@@ -14,8 +14,8 @@
     $.html5Audio.defaultSettings = {
         playButtonImgSrc: 'images/play.png',
         pauseButtonImgSrc: 'images/pause.png',
-        muteButtonImgSrc: 'images/mute.png',
-        spectroImgSrc: 'images/spectro.png'
+        muteButtonImgSrc: 'images/volume_high.png',
+        noMusicText: 'No Music'
     };
 
     // Plugin
@@ -60,6 +60,7 @@
 
     $.html5Audio.fn.run = function () {
         $.html5Audio.fn.createElements();
+        $.html5Audio.fn.defineBehavior();
     };
 
     $.html5Audio.fn.createElements = function () {
@@ -69,32 +70,51 @@
 
         // Controls Container
 
-        var controlsContainer = $('<div>');
+        var controlsContainer = $('<div>').addClass('h5aControls');
         controlsContainer.appendTo(container);
 
-        // Spectro Container
+        // Song Container
 
-        var spectroContainer = $('<div>');
-        spectroContainer.appendTo(container);
+        var songContainer = $('<div>').addClass('h5aSong');
+        songContainer.appendTo(container);
 
-        // Buttons
+        // Play / Pause Container
 
-        var playBtn = $('<img>').attr('src', $.html5Audio.config.playButtonImgSrc);
-        var pauseBtn = $('<img>').attr('src', $.html5Audio.config.pauseButtonImgSrc);
-        var muteBtn = $('<img>').attr('src', $.html5Audio.config.muteButtonImgSrc);
+        var playPauseContainer = $('<div>').addClass('h5aPlayPause');
+        playPauseContainer.appendTo(controlsContainer);
 
-        playBtn.appendTo(controlsContainer);
-        pauseBtn.appendTo(controlsContainer);
-        muteBtn.appendTo(controlsContainer);
+        // Volume Container
 
-        // Spectro
+        var volumeContainer = $('<div>').addClass('h5aVolume');
+        volumeContainer.appendTo(controlsContainer);
 
-        var spectro = $('<img>').attr('src', $.html5Audio.config.spectroImgSrc);
-        spectro.appendTo(spectroContainer);
+        // Control Buttons
+
+        var playBtn = $('<img>').addClass('h5aPlayBtn').attr('src', $.html5Audio.config.playButtonImgSrc);
+        var pauseBtn = $('<img>').addClass('h5aPauseBtn').attr('src', $.html5Audio.config.pauseButtonImgSrc);
+        var muteBtn = $('<img>').addClass('h5aMuteBtn').attr('src', $.html5Audio.config.muteButtonImgSrc);
+
+        playBtn.appendTo(playPauseContainer);
+        pauseBtn.appendTo(playPauseContainer);
+        muteBtn.appendTo(volumeContainer);
+
+        // Song Name
+
+        var song = $('<p>').text($.html5Audio.config.noMusicText);
+        song.appendTo(songContainer);
 
         // Putting on markup
 
         container.appendTo($.html5Audio.obj);
+    };
+
+    $.html5Audio.fn.defineBehavior = function () {
+        var obj = $.html5Audio.obj;
+        var mainContainer = obj.find('.html5Audio');
+
+        // Initial State: Paused
+
+        mainContainer.addClass('paused');
     };
 
 })(jQuery);
