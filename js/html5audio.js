@@ -8,6 +8,7 @@
         that: {},
         object: {},
         element: {
+            audio: {},
             mainContainer: {},
             playPauseContainer: {},
             playBtn: {},
@@ -110,7 +111,7 @@
 
         // Initial State: Paused
 
-        $.html5Audio.element.mainContainer.addClass('paused');
+        $.html5Audio.element.mainContainer.addClass('deactivated');
 
         // Setting Song Sources
 
@@ -121,7 +122,18 @@
 
         //// ** METHODS ** ////
 
+        var isActive = function () {
+            return !$.html5Audio.element.mainContainer.hasClass('deactivated');
+        };
+
+        var activate = function () {
+            $.html5Audio.element.mainContainer.removeClass('deactivated');
+            $.html5Audio.element.mainContainer.addClass('paused');
+        };
+
         var play = function (e) {
+            if (!isActive()) return;
+
             $.html5Audio.element.mainContainer.removeClass('paused');
             $.html5Audio.element.mainContainer.addClass('playing');
 
@@ -129,6 +141,8 @@
         };
 
         var pause = function (e) {
+            if (!isActive()) return;
+
             $.html5Audio.element.mainContainer.removeClass('playing');
             $.html5Audio.element.mainContainer.addClass('paused');
 
@@ -136,6 +150,8 @@
         };
 
         var togglePlayPause = function (e) {
+            if (!isActive()) return;
+
             var mainContainer = $.html5Audio.element.mainContainer;
 
             if (mainContainer.hasClass('playing')) {
@@ -147,6 +163,8 @@
         };
 
         var playSong = function (songUrl) {
+            if (!isActive()) { activate(); }
+
             var mainContainer = $.html5Audio.element.mainContainer;
             mainContainer.find('audio').remove();
 
@@ -181,12 +199,14 @@
     $.html5Audio.object.binder = function (behavior) {
         //// ** CONSTRUCTOR ** ////
 
-        if ($.html5Audio.element.songSources.length) {
-            $.html5Audio.element.songSources.click(function (e) {
+        var songSources = $.html5Audio.element.songSources;
+
+        if (!$.isEmptyObject(songSources)) {
+            songSources.click(function (e) {
                 e.preventDefault();
-                songUrl = $(e.currentTarget).attr('h5a-song-url');
+                var songUrl = $(e.currentTarget).attr('data-h5a-song-url');
+                behavior.playSong(songUrl);
             });
-            behavior.playSong(songUrl);
         }
 
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(e); });

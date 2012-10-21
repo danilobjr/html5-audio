@@ -30,6 +30,10 @@
     
 }
 
+.deactivated .h5aPauseBtn {
+    opacity: 0;
+}
+
 .playing .h5aPauseBtn {
     opacity: 1;
 }
