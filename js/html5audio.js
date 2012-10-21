@@ -7,6 +7,9 @@
         config: {},
         that: {},
         object: {},
+        const : {
+            autoClose: true
+        },
         element: {
             audio: {},
             mainContainer: {},
@@ -49,7 +52,7 @@
         $.html5Audio.object.configurator();
         var animator = $.html5Audio.object.animator();
         var behavior = $.html5Audio.object.behavior(constructor, animator);
-        $.html5Audio.object.binder(behavior);
+        $.html5Audio.object.binder(behavior, animator);
 
 
         return {
@@ -205,6 +208,7 @@
 
             loud();
             play();
+            animator.expandPlayer($.html5Audio.const.autoClose);
         };
 
         var togglePlaySongSource = function (songSource) {
@@ -274,13 +278,32 @@
             slider.css({ left: 0 });
         };
 
+        var expandPlayer = function (autoClose) {
+            var container = $.html5Audio.element.mainContainer;
+            var callBack = function (){};
+
+            if (autoClose) {
+                callBack = function () { setInterval(shrinkPlayer, 5000); };
+            }
+
+            container.animate({ width: 145 }, 400, callBack);
+        };
+
+        var shrinkPlayer = function () {
+            var container = $.html5Audio.element.mainContainer;
+            container.animate({ width: 70 }, 400);
+        };
+
+
         return {
             animateSongName: animateSongName,
-            stopAnimationSongName: stopAnimationSongName
+            stopAnimationSongName: stopAnimationSongName,
+            expandPlayer: expandPlayer,
+            shrinkPlayer: shrinkPlayer
         };
     };
 
-    $.html5Audio.object.binder = function (behavior) {
+    $.html5Audio.object.binder = function (behavior, animator) {
         //// ** CONSTRUCTOR ** ////
 
         var deactivatedClass = $.html5Audio.styleClasses.deactivated;
@@ -298,6 +321,9 @@
 
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(); });
         $.html5Audio.element.volumeBtn.click(function (e) { behavior.toggleMute(); });
+        $.html5Audio.element.mainContainer.hover(
+            function (e) { animator.expandPlayer(); },
+            function (e) { animator.shrinkPlayer(); });
     };
 
 })(jQuery);
