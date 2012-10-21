@@ -321,9 +321,9 @@
 
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(); });
         $.html5Audio.element.volumeBtn.click(function (e) { behavior.toggleMute(); });
-        $.html5Audio.element.mainContainer.hover(
-            function (e) { animator.expandPlayer(); },
-            function (e) { animator.shrinkPlayer(); });
+        $.html5Audio.element.mainContainer
+            .mouseenter(function (e) { animator.expandPlayer(); })
+            .mouseleave(function (e) { animator.shrinkPlayer(); });
     };
 
 })(jQuery);
