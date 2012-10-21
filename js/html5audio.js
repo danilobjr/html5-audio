@@ -15,6 +15,11 @@
             pauseBtn: {},
             volumeBtn: {},
             songSources: []
+        },
+        styleClasses: {
+            deactivated: 'h5aDeactivated',
+            playing: 'h5aPlaying',
+            paused: 'h5aPaused'
         }
     };
 
@@ -100,64 +105,68 @@
         // Putting on markup
 
         $.html5Audio.element.mainContainer.appendTo($.html5Audio.that);
-
-        // TODO : DELETE THIS CODE
-
-        $.html5Audio.element.audio = $('<audio>').attr({ src: 'musics/01.mp3' }).appendTo($.html5Audio.element.mainContainer).get(0);
     };
 
     $.html5Audio.object.configurator = function () {
         //// ** CONSTRUCTOR ** ////
 
-        // Initial State: Paused
+        // Initial State: Deactivated
 
-        $.html5Audio.element.mainContainer.addClass('deactivated');
+        $.html5Audio.element.mainContainer.addClass($.html5Audio.styleClasses.deactivated);
 
         // Setting Song Sources
 
-        $.html5Audio.element.songSources = $.html5Audio.config.songSources;
+        $.html5Audio.element.songSources = $($.html5Audio.config.songSources);
     };
 
     $.html5Audio.object.behavior = function () {
 
+        var deactivatedClass = $.html5Audio.styleClasses.deactivated;
+        var playingClass = $.html5Audio.styleClasses.playing;
+        var pausedClass = $.html5Audio.styleClasses.paused;
+
         //// ** METHODS ** ////
 
         var isActive = function () {
-            return !$.html5Audio.element.mainContainer.hasClass('deactivated');
+            return !$.html5Audio.element.mainContainer.hasClass(deactivatedClass);
         };
 
         var activate = function () {
-            $.html5Audio.element.mainContainer.removeClass('deactivated');
-            $.html5Audio.element.mainContainer.addClass('paused');
+            $.html5Audio.element.mainContainer.removeClass(deactivatedClass);
+            $.html5Audio.element.mainContainer.addClass(pausedClass);
         };
 
-        var play = function (e) {
+        var play = function () {
             if (!isActive()) return;
 
-            $.html5Audio.element.mainContainer.removeClass('paused');
-            $.html5Audio.element.mainContainer.addClass('playing');
+            $.html5Audio.element.mainContainer.removeClass(pausedClass);
+            $.html5Audio.element.mainContainer.addClass(playingClass);
 
             $.html5Audio.element.audio.play();
         };
 
-        var pause = function (e) {
+        var pause = function () {
             if (!isActive()) return;
 
-            $.html5Audio.element.mainContainer.removeClass('playing');
-            $.html5Audio.element.mainContainer.addClass('paused');
+            $.html5Audio.element.mainContainer.removeClass(playingClass);
+            $.html5Audio.element.mainContainer.addClass(pausedClass);
 
             $.html5Audio.element.audio.pause();
         };
 
-        var togglePlayPause = function (e) {
+        var togglePlayPause = function () {
             if (!isActive()) return;
 
             var mainContainer = $.html5Audio.element.mainContainer;
 
-            if (mainContainer.hasClass('playing')) {
+            if (mainContainer.hasClass(playingClass)) {
+                var playingSong = $.html5Audio.element.songSources.filter('.' + playingClass);
+                playingSong.removeClass(playingClass).addClass(pausedClass);
                 pause();
             }
             else {
+                var playingSong = $.html5Audio.element.songSources.filter('.' + pausedClass);
+                playingSong.addClass(playingClass).removeClass(pausedClass);
                 play();
             }
         };
@@ -170,17 +179,43 @@
 
             $.html5Audio.element.audio = $('<audio>').attr({ src: songUrl }).appendTo(mainContainer).get(0);
 
+            loud();
             play();
         };
 
-        var toggleMute = function (e) {
+        var togglePlaySongSource = function (songSource) {
+            if (songSource.hasClass(playingClass)) {
+                songSource.removeClass(playingClass).addClass(pausedClass);
+                pause();
+            }
+            else if (songSource.hasClass(pausedClass)) {
+                songSource.removeClass(pausedClass).addClass(playingClass);
+                play();
+            }
+            else {
+                $.html5Audio.element.songSources.removeClass(playingClass).removeClass(pausedClass);
+                songSource.removeClass(playingClass).addClass(playingClass);
+                var songUrl = songSource.attr('data-h5a-song-url');
+                playSong(songUrl);
+            }
+        };
+
+        var loud = function () {
+            $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.volumeButtonImgSrc);
+        };
+
+        var mute = function () {
+            $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.mutedVolumeButtonImgSrc);
+        };
+
+        var toggleMute = function () {
             var isMuted = $.html5Audio.element.audio.muted;
 
             if (isMuted) {
-                $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.volumeButtonImgSrc);
+                loud();
             }
             else {
-                $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.mutedVolumeButtonImgSrc);
+                mute();
             }
 
             $.html5Audio.element.audio.muted = !isMuted;
@@ -192,6 +227,7 @@
             pause: pause,
             togglePlayPause: togglePlayPause,
             playSong: playSong,
+            togglePlaySongSource: togglePlaySongSource,
             toggleMute: toggleMute
         }
     };
@@ -199,18 +235,35 @@
     $.html5Audio.object.binder = function (behavior) {
         //// ** CONSTRUCTOR ** ////
 
+        var deactivatedClass = $.html5Audio.styleClasses.deactivated;
+        var playingClass = $.html5Audio.styleClasses.playing;
+        var pausedClass = $.html5Audio.styleClasses.paused;
         var songSources = $.html5Audio.element.songSources;
 
         if (!$.isEmptyObject(songSources)) {
             songSources.click(function (e) {
                 e.preventDefault();
+                var _this = $(e.currentTarget);
+                behavior.togglePlaySongSource(_this);
+                /*if (_this.hasClass(playingClass)) {
+                _this.removeClass(playingClass).addClass(pausedClass);
+                behavior.pause();
+                }
+                else if (_this.hasClass(pausedClass)) {
+                _this.removeClass(pausedClass).addClass(playingClass);
+                behavior.play();
+                }
+                else {
+                $.html5Audio.element.songSources.removeClass(playingClass).removeClass(pausedClass);
+                _this.removeClass(playingClass).addClass(playingClass);
                 var songUrl = $(e.currentTarget).attr('data-h5a-song-url');
                 behavior.playSong(songUrl);
+                }*/
             });
         }
 
-        $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(e); });
-        $.html5Audio.element.volumeBtn.click(function (e) { behavior.toggleMute(e); });
+        $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(); });
+        $.html5Audio.element.volumeBtn.click(function (e) { behavior.toggleMute(); });
     };
 
 })(jQuery);

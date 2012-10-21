@@ -30,22 +30,22 @@
     
 }
 
-.deactivated .h5aPauseBtn {
+.h5aDeactivated .h5aPauseBtn {
     opacity: 0;
 }
 
-.playing .h5aPauseBtn {
+.h5aPlaying .h5aPauseBtn {
     opacity: 1;
 }
 
-.playing .h5aPlayBtn {
+.h5aPlaying .h5aPlayBtn {
     opacity: 0;
 }
 
-.paused .h5aPauseBtn {
+.h5aPaused .h5aPauseBtn {
     opacity: 0;
 }
 
-.paused .h5aPlayBtn {
+.h5aPaused .h5aPlayBtn {
     opacity: 1;
 }
