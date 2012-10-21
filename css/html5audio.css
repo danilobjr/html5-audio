@@ -1,12 +1,20 @@
 .html5Audio {
-    
+    position: absolute;
+    width: 61px;
 }
 
 .h5aControls {
-    
 }
 
 .h5aSong {
+    overflow: hidden;
+}
+
+.h5aSongSlider {
+    position: relative;
+}
+
+.h5aSong p {
     
 }
 

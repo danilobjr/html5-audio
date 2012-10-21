@@ -14,6 +14,7 @@
             playBtn: {},
             pauseBtn: {},
             volumeBtn: {},
+            songSlider: {},
             songName: {},
             songSources: []
         },
@@ -44,9 +45,10 @@
         $.html5Audio.that = $(this);
         $.html5Audio.config = $.extend({}, $.html5Audio.defaultSettings, userSettings); ;
 
-        $.html5Audio.object.constructor();
+        var constructor = $.html5Audio.object.constructor();
         $.html5Audio.object.configurator();
-        var behavior = $.html5Audio.object.behavior();
+        var animator = $.html5Audio.object.animator();
+        var behavior = $.html5Audio.object.behavior(constructor, animator);
         $.html5Audio.object.binder(behavior);
 
 
@@ -78,6 +80,11 @@
         var songContainer = $('<div>').addClass('h5aSong');
         songContainer.appendTo($.html5Audio.element.mainContainer);
 
+        // Song Slider
+
+        $.html5Audio.element.songSlider = $('<div>').addClass('h5aSongSlider');
+        $.html5Audio.element.songSlider.appendTo(songContainer);
+
         // Play / Pause Container
 
         $.html5Audio.element.playPauseContainer = $('<div>').addClass('h5aPlayPause');
@@ -101,11 +108,25 @@
         // Song Name
 
         $.html5Audio.element.songName = $('<p>').text($.html5Audio.config.noMusicText);
-        $.html5Audio.element.songName.appendTo(songContainer);
+        $.html5Audio.element.songName.appendTo($.html5Audio.element.songSlider);
 
         // Putting on markup
 
         $.html5Audio.element.mainContainer.appendTo($.html5Audio.that);
+
+
+        //// ** METHODS ** ////
+
+        var showMusicName = function (songSource) {
+            var artist = songSource.attr('data-h5a-song-artist');
+            var songName = songSource.attr('data-h5a-song-name');
+
+            $.html5Audio.element.songName.text(artist + ' - ' + songName);
+        };
+
+        return {
+            showMusicName: showMusicName
+        };
     };
 
     $.html5Audio.object.configurator = function () {
@@ -120,7 +141,7 @@
         $.html5Audio.element.songSources = $($.html5Audio.config.songSources);
     };
 
-    $.html5Audio.object.behavior = function () {
+    $.html5Audio.object.behavior = function (constructor, animator) {
 
         var deactivatedClass = $.html5Audio.styleClasses.deactivated;
         var playingClass = $.html5Audio.styleClasses.playing;
@@ -143,6 +164,7 @@
             $.html5Audio.element.mainContainer.removeClass(pausedClass);
             $.html5Audio.element.mainContainer.addClass(playingClass);
 
+            animator.animateSongName();
             $.html5Audio.element.audio.play();
         };
 
@@ -198,7 +220,7 @@
                 songSource.removeClass(playingClass).addClass(playingClass);
                 var songUrl = songSource.attr('data-h5a-song-url');
                 playSong(songUrl);
-                showMusicName(songSource);
+                constructor.showMusicName(songSource);
             }
         };
 
@@ -223,12 +245,6 @@
             $.html5Audio.element.audio.muted = !isMuted;
         };
 
-        var showMusicName = function (songSource) {
-            var artist = songSource.attr('data-h5a-song-artist');
-            var songName = songSource.attr('data-h5a-song-name');
-
-            $.html5Audio.element.songName.text(artist + ' - ' + songName);
-        };
 
         return {
             play: play,
@@ -236,9 +252,24 @@
             togglePlayPause: togglePlayPause,
             playSong: playSong,
             togglePlaySongSource: togglePlaySongSource,
-            toggleMute: toggleMute,
-            showMusicName: showMusicName
+            toggleMute: toggleMute
         }
+    };
+
+    $.html5Audio.object.animator = function () {
+        //// ** CONSTRUCTOR ** ////
+
+        var animateSongName = function () {
+            var songSlider = $.html5Audio.element.songSlider;
+            var width = songSlider.width();
+            songSlider.css({ left: '62px' });
+            songSlider.animate({ left: '-=' + (62 + width) }, 8000, 'linear', animateSongName);
+        };
+
+
+        return {
+            animateSongName: animateSongName
+        };
     };
 
     $.html5Audio.object.binder = function (behavior) {
@@ -254,20 +285,6 @@
                 e.preventDefault();
                 var _this = $(e.currentTarget);
                 behavior.togglePlaySongSource(_this);
-                /*if (_this.hasClass(playingClass)) {
-                _this.removeClass(playingClass).addClass(pausedClass);
-                behavior.pause();
-                }
-                else if (_this.hasClass(pausedClass)) {
-                _this.removeClass(pausedClass).addClass(playingClass);
-                behavior.play();
-                }
-                else {
-                $.html5Audio.element.songSources.removeClass(playingClass).removeClass(pausedClass);
-                _this.removeClass(playingClass).addClass(playingClass);
-                var songUrl = $(e.currentTarget).attr('data-h5a-song-url');
-                behavior.playSong(songUrl);
-                }*/
             });
         }
 
