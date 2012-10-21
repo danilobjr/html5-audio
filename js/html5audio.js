@@ -14,6 +14,7 @@
             playBtn: {},
             pauseBtn: {},
             volumeBtn: {},
+            songName: {},
             songSources: []
         },
         styleClasses: {
@@ -99,8 +100,8 @@
 
         // Song Name
 
-        var song = $('<p>').text($.html5Audio.config.noMusicText);
-        song.appendTo(songContainer);
+        $.html5Audio.element.songName = $('<p>').text($.html5Audio.config.noMusicText);
+        $.html5Audio.element.songName.appendTo(songContainer);
 
         // Putting on markup
 
@@ -197,6 +198,7 @@
                 songSource.removeClass(playingClass).addClass(playingClass);
                 var songUrl = songSource.attr('data-h5a-song-url');
                 playSong(songUrl);
+                showMusicName(songSource);
             }
         };
 
@@ -221,6 +223,12 @@
             $.html5Audio.element.audio.muted = !isMuted;
         };
 
+        var showMusicName = function (songSource) {
+            var artist = songSource.attr('data-h5a-song-artist');
+            var songName = songSource.attr('data-h5a-song-name');
+
+            $.html5Audio.element.songName.text(artist + ' - ' + songName);
+        };
 
         return {
             play: play,
@@ -228,7 +236,8 @@
             togglePlayPause: togglePlayPause,
             playSong: playSong,
             togglePlaySongSource: togglePlaySongSource,
-            toggleMute: toggleMute
+            toggleMute: toggleMute,
+            showMusicName: showMusicName
         }
     };
 
