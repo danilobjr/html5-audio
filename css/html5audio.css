@@ -1,6 +1,8 @@
 .html5Audio {
     position: absolute;
     width: 61px;
+    
+    
 }
 
 .h5aControls {
@@ -15,7 +17,7 @@
 }
 
 .h5aSong p {
-    
+    white-space: nowrap;
 }
 
 .h5aPlayPause {

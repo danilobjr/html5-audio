@@ -174,6 +174,7 @@
             $.html5Audio.element.mainContainer.removeClass(playingClass);
             $.html5Audio.element.mainContainer.addClass(pausedClass);
 
+            animator.stopAnimationSongName();
             $.html5Audio.element.audio.pause();
         };
 
@@ -219,8 +220,8 @@
                 $.html5Audio.element.songSources.removeClass(playingClass).removeClass(pausedClass);
                 songSource.removeClass(playingClass).addClass(playingClass);
                 var songUrl = songSource.attr('data-h5a-song-url');
-                playSong(songUrl);
                 constructor.showMusicName(songSource);
+                playSong(songUrl);
             }
         };
 
@@ -260,15 +261,22 @@
         //// ** CONSTRUCTOR ** ////
 
         var animateSongName = function () {
-            var songSlider = $.html5Audio.element.songSlider;
-            var width = songSlider.width();
-            songSlider.css({ left: '62px' });
-            songSlider.animate({ left: '-=' + (62 + width) }, 8000, 'linear', animateSongName);
+            var slider = $.html5Audio.element.songSlider;
+            var songName = $.html5Audio.element.songName;
+            var width = songName.text().length * 8;
+            slider.css({ left: '62px' });
+            slider.animate({ left: '-=' + (62 + width) }, 8000, 'linear', animateSongName);
         };
 
+        var stopAnimationSongName = function () {
+            var slider = $.html5Audio.element.songSlider;
+            slider.stop();
+            slider.css({ left: 0 });
+        };
 
         return {
-            animateSongName: animateSongName
+            animateSongName: animateSongName,
+            stopAnimationSongName: stopAnimationSongName
         };
     };
 
