@@ -251,7 +251,7 @@
             }
             else {
                 $.html5Audio.element.songSources.removeClass(playingClass).removeClass(pausedClass);
-                songSource.removeClass(playingClass).addClass(playingClass);
+                songSource.addClass(playingClass);
                 var songUrl = songSource.attr('data-h5a-song-url');
                 constructor.showMusicName(songSource);
                 constructor.showAlbumCover(songSource);
@@ -303,7 +303,7 @@
             var songName = $.html5Audio.element.songName;
             var width = songName.text().length * 8;
             songName.css({ left: '100px' });
-            songName.animate({ left: '-=' + (100 + width) }, 8000, 'linear', animateSongName);
+            songName.stop().animate({ left: '-=' + (100 + width) }, 8000, 'linear', animateSongName);
         };
 
         var stopAnimationSongName = function () {
@@ -314,33 +314,23 @@
 
         var showHideSong = function () {
             $.html5Audio.element.songContainer.removeClass(showHideSongAnimationClass);
-            $.html5Audio.element.songContainer.addClass(showHideSongAnimationClass);
+            setTimeout(function () { $.html5Audio.element.songContainer.addClass(showHideSongAnimationClass); }, 200);
         };
 
-        var expandPlayer = function (autoClose) {
-            /*
-            var container = $.html5Audio.element.mainContainer;
-            var callBack = function () { };
-
-            if (autoClose) {
-            callBack = function () { setInterval(shrinkPlayer, 5000); };
-            }
-
-            //container.animate({ width: 145 }, 400, callBack);*/
+        var showSong = function (autoClose) {
             $.html5Audio.element.albumCoverContainer.addClass(showCoverAnimationClass);
         };
 
-        var shrinkPlayer = function () {
-            var container = $.html5Audio.element.mainContainer;
-            //container.animate({ width: 70 }, 400);
+        var hideSong = function () {
+            $.html5Audio.element.albumCoverContainer.removeClass(showCoverAnimationClass);
         };
 
 
         return {
             animateSongName: animateSongName,
             stopAnimationSongName: stopAnimationSongName,
-            expandPlayer: expandPlayer,
-            shrinkPlayer: shrinkPlayer,
+            showSong: showSong,
+            hideSong: hideSong,
             showHideSong: showHideSong
         };
     };
@@ -363,9 +353,6 @@
 
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(); });
         $.html5Audio.element.volumeContainer.click(function (e) { behavior.toggleMute(); });
-        $.html5Audio.element.mainContainer
-            .mouseenter(function (e) { animator.expandPlayer(); })
-            .mouseleave(function (e) { animator.shrinkPlayer(); });
     };
 
 })(jQuery);

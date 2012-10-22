@@ -23,6 +23,12 @@
 
 .h5aSongName {
     position: relative;
+    
+    transition: all 150ms ease-out 100ms;
+    -webkit-transition: all 150ms ease-out 100ms;
+    -moz-transition: all 150ms ease-out 100ms;
+    -ms-transition: all 150ms ease-out 100ms;
+    -o-transition: all 150ms ease-ou 100ms;
 }
 
 .h5aSong p {
@@ -51,6 +57,10 @@
 
 .html5Audio:hover .h5aAlbumCover {
     top: 0;
+    opacity: 1;
+}
+
+.html5Audio:hover .h5aSongName {
     opacity: 1;
 }
 
@@ -131,6 +141,10 @@
 
 .h5aPaused .h5aPlayBtn {
     opacity: 1;
+}
+
+.h5aPaused .h5aSongName {
+    opacity: 0;
 }
 
 .h5aMuted .h5aVolumeMaxBtn {
