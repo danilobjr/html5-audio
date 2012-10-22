@@ -30,15 +30,15 @@
         </header>
 
         <section>
-            <p>Plugin Html5Audio</p>
-            <p>Minimalist player for HTML5 Audio Tag</p>
+            <!--<p>Plugin Html5Audio</p>
+            <p>Minimalist player for HTML5 Audio Tag</p>-->
 
             <h1>HTML5 Audio.</h1>
-            <p>A minimalist jQUery plugin for simple HTML5 audio play.</p>
+            <p>A minimalist jQuery plugin for HTML5 Audio Tag.</p>
 
             <ul>
                 <li>Global player controls</li>
-                <li>Play song from any <code>&lt;link&gt;</code> or <code>&lt;img&gt;</code></li>
+                <li>Play song from any element</li>
             </ul>
             
             <h3>Use</h3>
@@ -47,13 +47,8 @@
                 <li>
                     <p>Put the CSS on your site</p>
                     <div class="highlight">
-                        <pre>
-                            <span class="nt">&lt;link</span> 
-                            <span class="na">href=</span>
-                            <span class="s">"html5audio.css"</span> 
-                            <span class="na">rel=</span><span class="s">"stylesheet"</span> 
-                            <span class="nt">/&gt;</span>
-                        </pre>
+<pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"html5audio.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"html5audio_animations.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="nt">/&gt;</span></pre>
                     </div>
                 </li>
 
@@ -61,12 +56,7 @@
                     <p>jQuery Library</p>
 
                     <div class="highlight">
-                        <pre>
-                            <span class="nt">&lt;script </span>
-                            <span class="na">src=</span>
-                            <span class="s">"//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"</span>
-                            <span class="nt">&gt;&lt;/script&gt;</span>
-                        </pre>
+<pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span></pre>
                     </div>
                 </li>
 
@@ -74,12 +64,7 @@
                     <p>HTML5 Audio jQuery Plugin</p>
 
                     <div class="highlight">
-                        <pre>
-                            <span class="nt">&lt;script </span>
-                            <span class="na">src=</span>
-                            <span class="s">"html5audio.js"</span>
-                            <span class="nt">&gt;&lt;/script&gt;</span>
-                        </pre>
+<pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"html5audio.js"</span><span class="nt">&gt;&lt;/script&gt;</span></pre>
                     </div>
                 </li>
 
@@ -87,12 +72,7 @@
                     <p>Add a container to the global player</p>
 
                     <div class="highlight">
-                        <pre>
-                            <span class="nt">&lt;audio</span> 
-                            <span class="na">id=</span>
-                            <span class="s">"player"</span>
-                            <span class="nt">&gt;&lt;/audio&gt;</span>
-                        </pre>
+<pre><span class="nt">&lt;audio</span> <span class="na">id=</span><span class="s">"player"</span><span class="nt">&gt;&lt;/audio&gt;</span></pre>
                     </div>
                 </li>
 
@@ -100,34 +80,18 @@
                     <p>Some audio sources</p>
 
                     <div class="highlight">
-                        <pre>
-                            <span class="nt">&lt;a</span> 
-                            <span class="na">href=</span>
-                            <span class="s">"musics/music1"</span> 
-                            <span class="na">class=</span>
-                            <span class="s">"song"</span>
-                            <span class="nt">&gt;</span>
-                                Music 1
-                            <span class="nt">&lt;/a&gt;</span>
-                            <span class="nt">&lt;a</span> 
-  
-                            <span class="na">href=</span>
-                            <span class="s">"musics/music2"</span> 
-                            <span class="na">class=</span>
-                            <span class="s">"song"</span>
-                            <span class="nt">&gt;</span>
-                                Music 2
-                            <span class="nt">&lt;/a&gt;</span>
-
-                            <span class="nt">&lt;a</span> 
-                            <span class="na">href=</span>
-                            <span class="s">"musics/music3"</span> 
-                            <span class="na">class=</span>
-                            <span class="s">"song"</span>
-                            <span class="nt">&gt;</span>
-                                Music 3
-                            <span class="nt">&lt;/a&gt;</span>
-                        </pre>
+<pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">class=</span><span class="s">"song"</span>
+    <span class="na">data-h5a-song-artist=</span><span class="s">"Artist 1"</span>
+    <span class="na">data-h5a-song-name=</span><span class="s">"Music 1"</span>
+    <span class="na">data-h5a-song-url=</span><span class="s">"musics/music1.mp3"</span>
+    <span class="na">data-h5a-cover-url=</span><span class="s">"images/albumcover1.jpg"</span>
+<span class="nt">&gt;</span>Music 1<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">class=</span><span class="s">"song"</span>
+    <span class="na">data-h5a-song-artist=</span><span class="s">"Artist 2"</span>
+    <span class="na">data-h5a-song-name=</span><span class="s">"Music 2"</span>
+    <span class="na">data-h5a-song-url=</span><span class="s">"musics/music2.mp3"</span>
+    <span class="na">data-h5a-cover-url=</span><span class="s">"images/albumcover2.jpg"</span>
+<span class="nt">&gt;</span>Music 2<span class="nt">&lt;/a&gt;</span></pre>
                     </div>
                 </li>
 
@@ -135,23 +99,9 @@
                     <p>Configure</p>
 
                     <div class="highlight">
-                        <pre>
-                            <span class="nx">$</span>
-                            <span class="p">(</span>
-                            <span class="kd">function</span> 
-                            <span class="p">(){</span>
-                            <span class="nx">$</span>
-                            <span class="p">(</span>
-                            <span class="s1">'#player'</span>
-                            <span class="p">).</span>
-                            <span class="nx">html5Audio</span>
-                            <span class="p">({</span> 
-                            <span class="nx">song</span>
-                            <span class="o">:</span> 
-                            <span class="s1">'.song'</span> 
-                            <span class="p">});</span>
-                            <span class="p">});</span>
-                        </pre>
+<pre><span class="nx">$</span><span class="p">(</span><span class="kd">function</span> <span class="p">(){
+    </span><span class="nx">$</span><span class="p">(</span><span class="s1">'#player'</span><span class="p">).</span><span class="nx">html5Audio</span><span class="p">({</span> <span class="nx">songSources</span><span class="o">:</span> <span class="s1">'.song'</span> <span class="p">});</span>
+<span class="p">});</span></pre>
                     </div>
                 </li>
 
