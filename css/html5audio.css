@@ -11,24 +11,50 @@
     height: 100%;
 }
 
+.h5aControls > div:hover {
+    background-color: black;
+}
+
 .h5aSong {
     overflow: hidden;
     position: relative;
     width: 100%;
 }
 
-.h5aSongSlider {
+.h5aSongName {
     position: relative;
 }
 
 .h5aSong p {
+    position: relative;
     white-space: nowrap;
 }
 
 .h5aAlbumCover {
+    position: relative;
     width: 94px;
     height: 94px;
-    background-color: Gray;
+    top: -15px;
+    opacity: 0;
+    background-color: Gray;    
+    
+    transition: all 150ms ease-out;
+    -webkit-transition: all 150ms ease-out;
+    -moz-transition: all 150ms ease-out;
+    -ms-transition: all 150ms ease-out;
+    -o-transition: all 150ms ease-out;
+}
+
+.h5aAnimShowHideSong .h5aAlbumCover {
+    -webkit-animation: showHideAlbumCover 4s ease-out 1 alternate;
+}
+
+.html5Audio:hover .h5aAlbumCover {
+    top: 0;
+    opacity: 1;
+}
+
+.h5aDefaultAlbumCover {
 }
 
 .h5aPlayPause {
@@ -36,10 +62,6 @@
     float: left;
     width: 47px;
     height: 100%;
-}
-
-.h5aPlayPause:hover {
-    background-color: #00a0ff;
 }
 
 .h5aPlayPause img {
@@ -53,10 +75,6 @@
     float: left;
     width: 47px;
     height: 100%;
-}
-
-.h5aVolume:hover {
-    background-color: #fe4444;
 }
 
 .h5aVolume img {
@@ -73,13 +91,6 @@
 .h5aPauseBtn {
     position: relative;
 }
-/*
-.h5aVolumeMuteBtn, .h5aVolumeMaxBtn {
-    position: relative;
-    height: 15px;
-    left: 15px;
-    top: 15px;
-}*/
 
 .h5aVolumeMaxBtn {
     opacity: 1;
@@ -100,7 +111,12 @@
 .h5aDeactivated .h5aVolumeMuteBtn {
     opacity: 0;
 }
-
+/*
+.h5aDeactivated .h5aAlbumCover {
+    top: -30px;
+    opacity: 0;
+}
+    */
 .h5aPlaying .h5aPauseBtn {
     opacity: 1;
 }

@@ -19,7 +19,7 @@
             pauseBtn: {},
             volumeMaxBtn: {},
             volumeMuteBtn: {},
-            songSlider: {},
+            songNameContainer: {},
             songName: {},
             albumCoverContainer: {},
             albumCoverImg: {},
@@ -30,6 +30,10 @@
             playing: 'h5aPlaying',
             paused: 'h5aPaused',
             muted: 'h5aMuted'
+        },
+        animationClasses: {
+            showHideSong: 'h5aAnimShowHideSong',
+            showCover: 'h5aAnimShowCover'
         }
     };
 
@@ -41,7 +45,7 @@
         volumeMaxButtonImgSrc: 'images/volume_max.png',
         volumeMuteButtonImgSrc: 'images/volume_muted.png',
         noMusicText: 'No Music',
-        noAlbumCover: 'images/empty_algum_cover.png',
+        defaultAlbumCover: 'images/cd.png',
         songSources: []
     };
 
@@ -89,15 +93,15 @@
         $.html5Audio.element.songContainer = $('<div>').addClass('h5aSong');
         $.html5Audio.element.songContainer.appendTo($.html5Audio.element.mainContainer);
 
-        // Song Name Slider
+        // Song Name Container
 
-        $.html5Audio.element.songSlider = $('<div>').addClass('h5aSongSlider');
-        $.html5Audio.element.songSlider.appendTo($.html5Audio.element.songContainer);
+        $.html5Audio.element.songNameContainer = $('<div>').addClass('h5aSongName');
+        $.html5Audio.element.songNameContainer.appendTo($.html5Audio.element.songContainer);
 
         // Song Name
 
         $.html5Audio.element.songName = $('<p>').text($.html5Audio.config.noMusicText);
-        $.html5Audio.element.songName.appendTo($.html5Audio.element.songSlider);
+        $.html5Audio.element.songName.appendTo($.html5Audio.element.songNameContainer);
 
         // Album Cover Container
 
@@ -106,7 +110,7 @@
 
         // Album Cover Image
 
-        $.html5Audio.element.albumCoverImg = $('<img>').attr('src', $.html5Audio.config.noAlbumCover);
+        $.html5Audio.element.albumCoverImg = $('<img>').addClass('h5aDefaultAlbumCover').attr('src', $.html5Audio.config.defaultAlbumCover);
         $.html5Audio.element.albumCoverImg.appendTo($.html5Audio.element.albumCoverContainer);
 
         // Play / Pause Container
@@ -145,13 +149,14 @@
             $.html5Audio.element.songName.text(artist + ' - ' + songName);
         };
 
-        var showAlbumCover = function () {
-            var imgSrc = songSource.attr('data-h5a-album-cover');
-            $.html5Audio.element.songName.text(artist + ' - ' + songName);
+        var showAlbumCover = function (songSource) {
+            var imgSrc = songSource.attr('data-h5a-cover-url');
+            $.html5Audio.element.albumCoverImg.attr('src', imgSrc);
         };
 
         return {
-            showMusicName: showMusicName
+            showMusicName: showMusicName,
+            showAlbumCover: showAlbumCover
         };
     };
 
@@ -232,7 +237,7 @@
 
             loud();
             play();
-            animator.expandPlayer($.html5Audio.const .autoClose);
+            animator.showHideSong();
         };
 
         var togglePlaySongSource = function (songSource) {
@@ -249,6 +254,7 @@
                 songSource.removeClass(playingClass).addClass(playingClass);
                 var songUrl = songSource.attr('data-h5a-song-url');
                 constructor.showMusicName(songSource);
+                constructor.showAlbumCover(songSource);
                 playSong(songUrl);
             }
         };
@@ -288,29 +294,40 @@
     $.html5Audio.object.animator = function () {
         //// ** CONSTRUCTOR ** ////
 
+        var showHideSongAnimationClass = $.html5Audio.animationClasses.showHideSong;
+        var showCoverAnimationClass = $.html5Audio.animationClasses.showCover;
+
+        //// ** METHODS ** ////
+
         var animateSongName = function () {
-            var slider = $.html5Audio.element.songSlider;
             var songName = $.html5Audio.element.songName;
             var width = songName.text().length * 8;
-            slider.css({ left: '62px' });
-            slider.animate({ left: '-=' + (62 + width) }, 8000, 'linear', animateSongName);
+            songName.css({ left: '100px' });
+            songName.animate({ left: '-=' + (100 + width) }, 8000, 'linear', animateSongName);
         };
 
         var stopAnimationSongName = function () {
-            var slider = $.html5Audio.element.songSlider;
-            slider.stop();
-            slider.css({ left: 0 });
+            var songName = $.html5Audio.element.songName;
+            songName.stop();
+            songName.css({ left: 0 });
+        };
+
+        var showHideSong = function () {
+            $.html5Audio.element.songContainer.removeClass(showHideSongAnimationClass);
+            $.html5Audio.element.songContainer.addClass(showHideSongAnimationClass);
         };
 
         var expandPlayer = function (autoClose) {
+            /*
             var container = $.html5Audio.element.mainContainer;
             var callBack = function () { };
 
             if (autoClose) {
-                callBack = function () { setInterval(shrinkPlayer, 5000); };
+            callBack = function () { setInterval(shrinkPlayer, 5000); };
             }
 
-            //container.animate({ width: 145 }, 400, callBack);
+            //container.animate({ width: 145 }, 400, callBack);*/
+            $.html5Audio.element.albumCoverContainer.addClass(showCoverAnimationClass);
         };
 
         var shrinkPlayer = function () {
@@ -323,7 +340,8 @@
             animateSongName: animateSongName,
             stopAnimationSongName: stopAnimationSongName,
             expandPlayer: expandPlayer,
-            shrinkPlayer: shrinkPlayer
+            shrinkPlayer: shrinkPlayer,
+            showHideSong: showHideSong
         };
     };
 
