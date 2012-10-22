@@ -54,13 +54,22 @@
 .h5aAnimShowHideSong .h5aAlbumCover {
     -webkit-animation: showHideAlbumCover 4s ease-out 1 alternate;
 }
-
+/*
 .html5Audio:hover .h5aAlbumCover {
     top: 0;
     opacity: 1;
 }
 
 .html5Audio:hover .h5aSongName {
+    opacity: 1;
+}
+    */
+.h5aControls:hover + div .h5aAlbumCover {
+    top: 0;
+    opacity: 1;
+}
+
+.h5aControls:hover + div .h5aSongName {
     opacity: 1;
 }
 
