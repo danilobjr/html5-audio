@@ -54,16 +54,7 @@
 .h5aAnimShowHideSong .h5aAlbumCover {
     -webkit-animation: showHideAlbumCover 4s ease-out 1 alternate;
 }
-/*
-.html5Audio:hover .h5aAlbumCover {
-    top: 0;
-    opacity: 1;
-}
 
-.html5Audio:hover .h5aSongName {
-    opacity: 1;
-}
-    */
 .h5aControls:hover + div .h5aAlbumCover {
     top: 0;
     opacity: 1;
@@ -130,12 +121,7 @@
 .h5aDeactivated .h5aVolumeMuteBtn {
     opacity: 0;
 }
-/*
-.h5aDeactivated .h5aAlbumCover {
-    top: -30px;
-    opacity: 0;
-}
-    */
+
 .h5aPlaying .h5aPauseBtn {
     opacity: 1;
 }
