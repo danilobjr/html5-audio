@@ -14,17 +14,22 @@
             audio: {},
             mainContainer: {},
             playPauseContainer: {},
+            volumeContainer: {},
             playBtn: {},
             pauseBtn: {},
-            volumeBtn: {},
+            volumeMaxBtn: {},
+            volumeMuteBtn: {},
             songSlider: {},
             songName: {},
+            albumCoverContainer: {},
+            albumCoverImg: {},
             songSources: []
         },
         styleClasses: {
             deactivated: 'h5aDeactivated',
             playing: 'h5aPlaying',
-            paused: 'h5aPaused'
+            paused: 'h5aPaused',
+            muted: 'h5aMuted'
         }
     };
 
@@ -33,9 +38,10 @@
     $.html5Audio.defaultSettings = {
         playButtonImgSrc: 'images/play.png',
         pauseButtonImgSrc: 'images/pause.png',
-        volumeButtonImgSrc: 'images/volume_max.png',
-        mutedVolumeButtonImgSrc: 'images/volume_muted.png',
+        volumeMaxButtonImgSrc: 'images/volume_max.png',
+        volumeMuteButtonImgSrc: 'images/volume_muted.png',
         noMusicText: 'No Music',
+        noAlbumCover: 'images/empty_algum_cover.png',
         songSources: []
     };
 
@@ -80,13 +86,28 @@
 
         // Song Container
 
-        var songContainer = $('<div>').addClass('h5aSong');
-        songContainer.appendTo($.html5Audio.element.mainContainer);
+        $.html5Audio.element.songContainer = $('<div>').addClass('h5aSong');
+        $.html5Audio.element.songContainer.appendTo($.html5Audio.element.mainContainer);
 
-        // Song Slider
+        // Song Name Slider
 
         $.html5Audio.element.songSlider = $('<div>').addClass('h5aSongSlider');
-        $.html5Audio.element.songSlider.appendTo(songContainer);
+        $.html5Audio.element.songSlider.appendTo($.html5Audio.element.songContainer);
+
+        // Song Name
+
+        $.html5Audio.element.songName = $('<p>').text($.html5Audio.config.noMusicText);
+        $.html5Audio.element.songName.appendTo($.html5Audio.element.songSlider);
+
+        // Album Cover Container
+
+        $.html5Audio.element.albumCoverContainer = $('<div>').addClass('h5aAlbumCover');
+        $.html5Audio.element.albumCoverContainer.appendTo($.html5Audio.element.songContainer);
+
+        // Album Cover Image
+
+        $.html5Audio.element.albumCoverImg = $('<img>').attr('src', $.html5Audio.config.noAlbumCover);
+        $.html5Audio.element.albumCoverImg.appendTo($.html5Audio.element.albumCoverContainer);
 
         // Play / Pause Container
 
@@ -95,23 +116,20 @@
 
         // Volume Container
 
-        var volumeContainer = $('<div>').addClass('h5aVolume');
-        volumeContainer.appendTo(controlsContainer);
+        $.html5Audio.element.volumeContainer = $('<div>').addClass('h5aVolume');
+        $.html5Audio.element.volumeContainer.appendTo(controlsContainer);
 
         // Control Buttons
 
         $.html5Audio.element.playBtn = $('<img>').addClass('h5aPlayBtn').attr('src', $.html5Audio.config.playButtonImgSrc);
         $.html5Audio.element.pauseBtn = $('<img>').addClass('h5aPauseBtn').attr('src', $.html5Audio.config.pauseButtonImgSrc);
-        $.html5Audio.element.volumeBtn = $('<img>').addClass('h5aMuteBtn').attr('src', $.html5Audio.config.volumeButtonImgSrc);
+        $.html5Audio.element.volumeMaxBtn = $('<img>').addClass('h5aVolumeMaxBtn').attr('src', $.html5Audio.config.volumeMaxButtonImgSrc);
+        $.html5Audio.element.volumeMuteBtn = $('<img>').addClass('h5aVolumeMuteBtn').attr('src', $.html5Audio.config.volumeMuteButtonImgSrc);
 
         $.html5Audio.element.playBtn.appendTo($.html5Audio.element.playPauseContainer);
         $.html5Audio.element.pauseBtn.appendTo($.html5Audio.element.playPauseContainer);
-        $.html5Audio.element.volumeBtn.appendTo(volumeContainer);
-
-        // Song Name
-
-        $.html5Audio.element.songName = $('<p>').text($.html5Audio.config.noMusicText);
-        $.html5Audio.element.songName.appendTo($.html5Audio.element.songSlider);
+        $.html5Audio.element.volumeMaxBtn.appendTo($.html5Audio.element.volumeContainer);
+        $.html5Audio.element.volumeMuteBtn.appendTo($.html5Audio.element.volumeContainer);
 
         // Putting on markup
 
@@ -124,6 +142,11 @@
             var artist = songSource.attr('data-h5a-song-artist');
             var songName = songSource.attr('data-h5a-song-name');
 
+            $.html5Audio.element.songName.text(artist + ' - ' + songName);
+        };
+
+        var showAlbumCover = function () {
+            var imgSrc = songSource.attr('data-h5a-album-cover');
             $.html5Audio.element.songName.text(artist + ' - ' + songName);
         };
 
@@ -149,6 +172,7 @@
         var deactivatedClass = $.html5Audio.styleClasses.deactivated;
         var playingClass = $.html5Audio.styleClasses.playing;
         var pausedClass = $.html5Audio.styleClasses.paused;
+        var volumeMuteClass = $.html5Audio.styleClasses.muted;
 
         //// ** METHODS ** ////
 
@@ -208,7 +232,7 @@
 
             loud();
             play();
-            animator.expandPlayer($.html5Audio.const.autoClose);
+            animator.expandPlayer($.html5Audio.const .autoClose);
         };
 
         var togglePlaySongSource = function (songSource) {
@@ -230,11 +254,11 @@
         };
 
         var loud = function () {
-            $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.volumeButtonImgSrc);
+            $.html5Audio.element.mainContainer.removeClass(volumeMuteClass);
         };
 
         var mute = function () {
-            $.html5Audio.element.volumeBtn.attr('src', $.html5Audio.config.mutedVolumeButtonImgSrc);
+            $.html5Audio.element.mainContainer.addClass(volumeMuteClass);
         };
 
         var toggleMute = function () {
@@ -280,18 +304,18 @@
 
         var expandPlayer = function (autoClose) {
             var container = $.html5Audio.element.mainContainer;
-            var callBack = function (){};
+            var callBack = function () { };
 
             if (autoClose) {
                 callBack = function () { setInterval(shrinkPlayer, 5000); };
             }
 
-            container.animate({ width: 145 }, 400, callBack);
+            //container.animate({ width: 145 }, 400, callBack);
         };
 
         var shrinkPlayer = function () {
             var container = $.html5Audio.element.mainContainer;
-            container.animate({ width: 70 }, 400);
+            //container.animate({ width: 70 }, 400);
         };
 
 
@@ -320,7 +344,7 @@
         }
 
         $.html5Audio.element.playPauseContainer.click(function (e) { behavior.togglePlayPause(); });
-        $.html5Audio.element.volumeBtn.click(function (e) { behavior.toggleMute(); });
+        $.html5Audio.element.volumeContainer.click(function (e) { behavior.toggleMute(); });
         $.html5Audio.element.mainContainer
             .mouseenter(function (e) { animator.expandPlayer(); })
             .mouseleave(function (e) { animator.shrinkPlayer(); });
