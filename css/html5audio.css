@@ -11,6 +11,12 @@
     height: 100%;
 }
 
+.h5aControls img {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
 .h5aControls > div:hover {
     background-color: black;
 }
@@ -33,6 +39,7 @@
 
 .h5aSong p {
     position: relative;
+    margin: 0;
     white-space: nowrap;
 }
 
@@ -65,6 +72,10 @@
 }
 
 .h5aDefaultAlbumCover {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
 }
 
 .h5aPlayPause {
