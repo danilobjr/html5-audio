@@ -39,6 +39,7 @@
 
 .h5aSong p {
     position: relative;
+    margin: 0;
     white-space: nowrap;
 }
 
@@ -71,6 +72,10 @@
 }
 
 .h5aDefaultAlbumCover {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
 }
 
 .h5aPlayPause {

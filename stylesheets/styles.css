@@ -302,6 +302,102 @@ footer {
 	padding-left: 50px;
 }
 
+/* CUSTOM */
+
+#player {
+    position: relative;
+    float: left;
+    width: 94px;
+    height: 150px;
+}
+
+#playlist {
+    box-sizing: border-box;
+    float: left;    
+    width: 80%;
+    margin-left: 30px;
+    padding-left: 30px;
+    border-left: 1px solid #CCC;
+}
+
+#playlist ul li {
+    height: 30px;
+    margin: 0 0 5px 0;
+    padding: 6px 6px 6px 7px;
+    list-style: none;
+
+	background: #AF0011;
+	background: -moz-linear-gradient(top, #AF0011 0%, #820011 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
+    background: -webkit-linear-gradient(top, #AF0011 0%,#820011 100%);
+    background: -o-linear-gradient(top, #AF0011 0%,#820011 100%);
+    background: -ms-linear-gradient(top, #AF0011 0%,#820011 100%);
+    background: linear-gradient(top, #AF0011 0%,#820011 100%);
+
+	border-radius:4px;
+    border:1px solid #0D0D0D;
+}
+
+#playlist ul li:hover {
+    cursor: pointer;
+
+	background: #C3001D;
+	background: -moz-linear-gradient(top, #C3001D 0%, #950119 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
+    background: -webkit-linear-gradient(top, #C3001D 0%,#950119 100%);
+    background: -o-linear-gradient(top, #C3001D 0%,#950119 100%);
+    background: -ms-linear-gradient(top, #C3001D 0%,#950119 100%);
+    background: linear-gradient(top, #C3001D 0%,#950119 100%);
+}
+
+#playlist ul li:hover img {
+    margin-left: 10px;
+}
+
+#playlist ul li img {
+    float: left;
+    height: 18px;
+    margin: 5px 0 0 2px;
+    padding: 0;
+    border: none;
+    
+    transition: all 200ms ease-out;
+    -webkit-transition: all 200ms ease-out;
+    -moz-transition: all 200ms ease-out;
+    -ms-transition: all 200ms ease-out;
+    -o-transition: all 200ms ease-out;
+}
+
+#playlist ul li p {
+    float: left;
+    margin: 2px 0 0 10px;
+    color: white;
+}
+
+.song img.play {
+    position: absolute;
+}
+
+.song img.pause {
+    opacity: 0;
+}
+
+.h5aSourcePlaying img.play {
+    opacity: 0;
+}
+
+.h5aSourcePlaying img.pause {
+    opacity: 1;
+}
+
+.h5aSourcePaused img.play {
+    opacity: 1;
+}
+
+.h5aSourcePaused img.pause {
+    opacity: 0;
+}
+
 @media print, screen and (max-width: 960px) {
 
   div.wrapper {

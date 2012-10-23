@@ -27,8 +27,10 @@
         },
         styleClasses: {
             deactivated: 'h5aDeactivated',
-            playing: 'h5aPlaying',
-            paused: 'h5aPaused',
+            playerPlaying: 'h5aPlaying',
+            playerPaused: 'h5aPaused',
+            sourcePlaying: 'h5aSourcePlaying',
+            sourcePaused: 'h5aSourcePaused',
             muted: 'h5aMuted'
         },
         animationClasses: {
@@ -175,8 +177,10 @@
     $.html5Audio.object.behavior = function (constructor, animator) {
 
         var deactivatedClass = $.html5Audio.styleClasses.deactivated;
-        var playingClass = $.html5Audio.styleClasses.playing;
-        var pausedClass = $.html5Audio.styleClasses.paused;
+        var playerPlayingClass = $.html5Audio.styleClasses.playerPlaying;
+        var playerPausedClass = $.html5Audio.styleClasses.playerPaused;
+        var sourcePlayingClass = $.html5Audio.styleClasses.sourcePlaying;
+        var sourcePausedClass = $.html5Audio.styleClasses.sourcePaused;
         var volumeMuteClass = $.html5Audio.styleClasses.muted;
 
         //// ** METHODS ** ////
@@ -187,14 +191,14 @@
 
         var activate = function () {
             $.html5Audio.element.mainContainer.removeClass(deactivatedClass);
-            $.html5Audio.element.mainContainer.addClass(pausedClass);
+            $.html5Audio.element.mainContainer.addClass(playerPausedClass);
         };
 
         var play = function () {
             if (!isActive()) return;
 
-            $.html5Audio.element.mainContainer.removeClass(pausedClass);
-            $.html5Audio.element.mainContainer.addClass(playingClass);
+            $.html5Audio.element.mainContainer.removeClass(playerPausedClass);
+            $.html5Audio.element.mainContainer.addClass(playerPlayingClass);
 
             animator.animateSongName();
             $.html5Audio.element.audio.play();
@@ -203,8 +207,8 @@
         var pause = function () {
             if (!isActive()) return;
 
-            $.html5Audio.element.mainContainer.removeClass(playingClass);
-            $.html5Audio.element.mainContainer.addClass(pausedClass);
+            $.html5Audio.element.mainContainer.removeClass(playerPlayingClass);
+            $.html5Audio.element.mainContainer.addClass(playerPausedClass);
 
             animator.stopAnimationSongName();
             $.html5Audio.element.audio.pause();
@@ -215,14 +219,14 @@
 
             var mainContainer = $.html5Audio.element.mainContainer;
 
-            if (mainContainer.hasClass(playingClass)) {
-                var playingSong = $.html5Audio.element.songSources.filter('.' + playingClass);
-                playingSong.removeClass(playingClass).addClass(pausedClass);
+            if (mainContainer.hasClass(playerPlayingClass)) {
+                var playingSong = $.html5Audio.element.songSources.filter('.' + sourcePlayingClass);
+                playingSong.removeClass(sourcePlayingClass).addClass(sourcePausedClass);
                 pause();
             }
             else {
-                var playingSong = $.html5Audio.element.songSources.filter('.' + pausedClass);
-                playingSong.addClass(playingClass).removeClass(pausedClass);
+                var playingSong = $.html5Audio.element.songSources.filter('.' + sourcePausedClass);
+                playingSong.addClass(sourcePlayingClass).removeClass(sourcePausedClass);
                 play();
             }
         };
@@ -241,17 +245,17 @@
         };
 
         var togglePlaySongSource = function (songSource) {
-            if (songSource.hasClass(playingClass)) {
-                songSource.removeClass(playingClass).addClass(pausedClass);
+            if (songSource.hasClass(sourcePlayingClass)) {
+                songSource.removeClass(sourcePlayingClass).addClass(sourcePausedClass);
                 pause();
             }
-            else if (songSource.hasClass(pausedClass)) {
-                songSource.removeClass(pausedClass).addClass(playingClass);
+            else if (songSource.hasClass(sourcePausedClass)) {
+                songSource.removeClass(sourcePausedClass).addClass(sourcePlayingClass);
                 play();
             }
             else {
-                $.html5Audio.element.songSources.removeClass(playingClass).removeClass(pausedClass);
-                songSource.addClass(playingClass);
+                $.html5Audio.element.songSources.removeClass(sourcePlayingClass).removeClass(sourcePausedClass);
+                songSource.addClass(sourcePlayingClass);
                 var songUrl = songSource.attr('data-h5a-song-url');
                 constructor.showMusicName(songSource);
                 constructor.showAlbumCover(songSource);
@@ -338,9 +342,6 @@
     $.html5Audio.object.binder = function (behavior, animator) {
         //// ** CONSTRUCTOR ** ////
 
-        var deactivatedClass = $.html5Audio.styleClasses.deactivated;
-        var playingClass = $.html5Audio.styleClasses.playing;
-        var pausedClass = $.html5Audio.styleClasses.paused;
         var songSources = $.html5Audio.element.songSources;
 
         if (!$.isEmptyObject(songSources)) {
