@@ -484,3 +484,22 @@ footer {
     color:#444;
   }
 }
+
+/* CUSTOM */
+
+.social a img {
+    width: 28px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    
+    transition: opacity 200ms ease-out;
+    -webkit-transition: opacity 200ms ease-out;
+    -moz-transition: opacity 200ms ease-out;
+    -ms-transition: opacity 200ms ease-out;
+    -o-transition: opacity 200ms ease-out;
+}
+
+.social a:hover img {
+    opacity: 0.55;
+}
